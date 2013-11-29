@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -15,10 +16,13 @@ public class SeasonTrendView extends View {
 
 	private static int SMALL_MARGIN;
 	private static int BIG_MARGIN;
+	private static int LEGEND_LEFT_WIDTH;
+	private static int LEGEND_LEFT_MARGIN;
+	private static int LEGEND_BOTTOM_MARGIN;
+	private static int TEXT_SIZE;
 
-	private Context context;
-
-	private Paint testPaint;
+	private Paint backgroundPaint;
+	private TextPaint textPaint;
 
 	private int height = 888;
 
@@ -38,7 +42,6 @@ public class SeasonTrendView extends View {
 	}
 
 	public void initView(Context context) {
-		this.context = context;
 		initValues();
 		initPaint();
 	}
@@ -49,11 +52,21 @@ public class SeasonTrendView extends View {
 		SMALL_MARGIN = (int) res
 				.getDimension(R.dimen.season_trend_margin_small);
 		BIG_MARGIN = (int) res.getDimension(R.dimen.season_trend_margin_big);
+		LEGEND_LEFT_WIDTH = (int) res.getDimension(R.dimen.season_trend_legend_left_width);
+		LEGEND_LEFT_MARGIN = (int) res.getDimension(R.dimen.season_trend_legend_left_margin);
+		LEGEND_BOTTOM_MARGIN = (int) res.getDimension(R.dimen.season_trend_legend_bottom_margin);
+		TEXT_SIZE = (int) res.getDimension(R.dimen.season_trend_text_size);
 	}
 
 	public void initPaint() {
-		testPaint = new Paint();
-		testPaint.setColor(Color.RED);
+		backgroundPaint = new Paint();
+		backgroundPaint.setColor(Color.parseColor("#e2e2e2"));
+		backgroundPaint.setAlpha(70);
+		
+		textPaint = new TextPaint();
+		textPaint.setColor(Color.parseColor("#676767"));
+		textPaint.setTextSize(TEXT_SIZE);
+		textPaint.setFlags(Paint.SUBPIXEL_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
 	}
 
 	@Override
@@ -61,11 +74,71 @@ public class SeasonTrendView extends View {
 		int height = getHeight();
 		int width = getWidth();
 
-		for (int i = 0; i < 34; i++) {
-			if (i <= 16)
-				canvas.drawRect(i * SQUARE_SIZE, height - SQUARE_SIZE + SMALL_MARGIN, (i + 1) * SQUARE_SIZE - SMALL_MARGIN, height, testPaint);
-			else
-				canvas.drawRect(i * SQUARE_SIZE + BIG_MARGIN, height - SQUARE_SIZE + SMALL_MARGIN, (i + 1) * SQUARE_SIZE - SMALL_MARGIN + BIG_MARGIN, height, testPaint);
+		float horizontalTextY = 18 * SQUARE_SIZE + 5 * BIG_MARGIN + LEGEND_BOTTOM_MARGIN + TEXT_SIZE;
+		float currentY = 0;
+		for (int y = 17; y >= 0; y--) {
+			currentY = y * SQUARE_SIZE;
+			
+			if (y < 3) {
+				backgroundPaint.setColor(Color.parseColor("#44BC2856"));
+			}
+			if (y >= 3) {
+				currentY += BIG_MARGIN;
+				backgroundPaint.setColor(Color.parseColor("#44207A24"));
+			}
+			if (y >= 4) {
+				currentY += BIG_MARGIN;
+				backgroundPaint.setColor(Color.parseColor("#44BAAC2A"));
+			}
+			if (y >= 6) {
+				currentY += BIG_MARGIN;
+				backgroundPaint.setColor(Color.parseColor("#44e2e2e2"));
+			}
+			if (y >= 15) {
+				currentY += BIG_MARGIN;
+				backgroundPaint.setColor(Color.parseColor("#44a00000"));
+			}
+			if (y >= 16) {
+				currentY += BIG_MARGIN;
+				backgroundPaint.setColor(Color.parseColor("#44ff0000"));
+			}
+			
+			if (y == 17)
+				canvas.drawText("18", LEGEND_LEFT_WIDTH - LEGEND_LEFT_MARGIN - textPaint.measureText("18"), currentY + TEXT_SIZE, textPaint);
+			else if (y == 14)
+				canvas.drawText("15", LEGEND_LEFT_WIDTH - LEGEND_LEFT_MARGIN - textPaint.measureText("15"), currentY + TEXT_SIZE, textPaint);
+			else if (y == 9)
+				canvas.drawText("10", LEGEND_LEFT_WIDTH - LEGEND_LEFT_MARGIN - textPaint.measureText("10"), currentY + TEXT_SIZE, textPaint);
+			else if (y == 4)
+				canvas.drawText("5", LEGEND_LEFT_WIDTH - LEGEND_LEFT_MARGIN - textPaint.measureText("5"), currentY + TEXT_SIZE, textPaint);
+			else if (y == 0)
+				canvas.drawText("1", LEGEND_LEFT_WIDTH - LEGEND_LEFT_MARGIN - textPaint.measureText("1"), currentY + TEXT_SIZE, textPaint);
+			
+			
+			for (int x = 0; x < 34; x++) {
+				float currentX = LEGEND_LEFT_WIDTH + x * SQUARE_SIZE;
+				if (x <= 16)
+					canvas.drawRect(currentX, currentY, currentX + SQUARE_SIZE - SMALL_MARGIN, currentY + SQUARE_SIZE - SMALL_MARGIN, backgroundPaint);
+				else
+					canvas.drawRect(currentX + BIG_MARGIN, currentY, currentX + SQUARE_SIZE - SMALL_MARGIN + BIG_MARGIN, currentY + SQUARE_SIZE - SMALL_MARGIN, backgroundPaint);
+			
+				if (x == 0)
+					canvas.drawText("1. Spieltag", currentX, horizontalTextY, textPaint);
+				if (x == 9)
+					canvas.drawText("10.", currentX, horizontalTextY, textPaint);
+				if (x == 14)
+					canvas.drawText("15.", currentX, horizontalTextY, textPaint);
+				if (x == 19)
+					canvas.drawText("20.", currentX, horizontalTextY, textPaint);
+				if (x == 24)
+					canvas.drawText("25.", currentX, horizontalTextY, textPaint);
+				if (x == 29)
+					canvas.drawText("30.", currentX, horizontalTextY, textPaint);
+				if (x == 33)
+					canvas.drawText("34.", currentX, horizontalTextY, textPaint);
+			}
+			
+			
 		}
 	}
 
@@ -74,7 +147,9 @@ public class SeasonTrendView extends View {
 		int parentWidth = ((View) getParent()).getWidth();
 		setMeasuredDimension(height, parentWidth);
 
-		SQUARE_SIZE = (height - BIG_MARGIN) / 34;
+		int verticalSize = (parentWidth - 5 * BIG_MARGIN) / 18;
+		int horizontalSize = (height - LEGEND_LEFT_WIDTH - BIG_MARGIN) / 34;
+		SQUARE_SIZE = Math.min(verticalSize, horizontalSize);
 	}
 
 	@Override

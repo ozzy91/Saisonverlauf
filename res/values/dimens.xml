@@ -5,7 +5,12 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     
     <!-- Season Trend -->
-    <dimen name="season_trend_margin_small">2dp</dimen>
-    <dimen name="season_trend_margin_big">4dp</dimen>
+    <dimen name="season_trend_margin_small">3dp</dimen>
+    <dimen name="season_trend_margin_big">3dp</dimen>
+    <dimen name="season_trend_legend_left_width">30dp</dimen>
+    <dimen name="season_trend_legend_left_margin">15dp</dimen>
+    <dimen name="season_trend_legend_bottom_margin">7dp</dimen>
+    <dimen name="season_trend_text_size">11dp</dimen>
+    
 
 </resources>
