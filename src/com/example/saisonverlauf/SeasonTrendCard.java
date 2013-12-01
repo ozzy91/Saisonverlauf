@@ -1,10 +1,13 @@
 package com.example.saisonverlauf;
 
+import java.util.Map;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class SeasonTrendCard extends LinearLayout {
@@ -44,6 +47,10 @@ public class SeasonTrendCard extends LinearLayout {
 				seasonTrendView.setRotation(-90);
 			}
 		});
+	}
+	
+	public void setData(Map<String, Object> subnode) {
+		seasonTrendView.testCode();
 	}
 
 }

@@ -4,6 +4,7 @@
     android:background="@drawable/bg_portrait_2x" >
 
     <com.example.saisonverlauf.SeasonTrendCard 
+        android:id="@+id/season_trend_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

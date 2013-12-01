@@ -5,11 +5,15 @@ import android.app.Activity;
 import android.view.Menu;
 
 public class MainActivity extends Activity {
+	
+	private SeasonTrendCard seasonTrend;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		seasonTrend = (SeasonTrendCard) findViewById(R.id.season_trend_card);
+		seasonTrend.setData(null);
 	}
 
 	@Override
